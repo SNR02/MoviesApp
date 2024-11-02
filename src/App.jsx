@@ -7,6 +7,7 @@ import MoviePage from './pages/MoviePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import SignUp from './pages/SignUp';
 import SearchResults from './pages/SearchResultsPage';
+import WatchlistPage from './pages/WatchlistPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path='/signup' element={<SignUp />} />
+        <Route path="/watchlist/:listName" element={<WatchlistPage />} />
         <Route
           path="/"
           element={

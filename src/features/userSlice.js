@@ -16,12 +16,16 @@ const userSlice = createSlice({
     signupUser: (state, action) => {
       const { email, name } = action.payload;
       const userExists = state.users.some((user) => user.email === email);
-
       if (!userExists) {
-        const newUser = { email, name, signedIn: true, watchlists: {}, recentlyViewedMovies: [] };
+        const newUser = {
+          email,
+          name,
+          signedIn: true,
+          watchlists: { default: [] },
+          recentlyViewedMovies: [],
+        };
         state.users.push(newUser);
         state.currentUser = email;
-        state.error = null;
         saveToLocalStorage('users', state.users);
         saveToLocalStorage('currentUser', email);
       } else {
@@ -56,24 +60,21 @@ const userSlice = createSlice({
     addToWatchlist: (state, action) => {
       const { category, movie } = action.payload;
       const user = state.users.find((user) => user.email === state.currentUser);
-
       if (user) {
-        if (!user.watchlists[category]) {
-          user.watchlists[category] = [];
-        }
-        if (!user.watchlists[category].some((item) => item.id === movie.id)) {
+        if (!user.watchlists[category]) user.watchlists[category] = [];
+        // Check if movie with the same imdbID exists
+        if (!user.watchlists[category].some((item) => item.imdbID === movie.imdbID)) {
           user.watchlists[category].push(movie);
           saveToLocalStorage('users', state.users);
         }
       }
     },
-
-    removeFromWatchlist: (state, action) => {
-      const { category, movieId } = action.payload;
+    
+    createWatchlist: (state, action) => {
+      const { name } = action.payload;
       const user = state.users.find((user) => user.email === state.currentUser);
-
-      if (user && user.watchlists[category]) {
-        user.watchlists[category] = user.watchlists[category].filter((movie) => movie.id !== movieId);
+      if (user && !user.watchlists[name]) {
+        user.watchlists[name] = [];
         saveToLocalStorage('users', state.users);
       }
     },
@@ -94,5 +95,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { signupUser, loginUser, logoutUser, addToWatchlist, removeFromWatchlist, addMovieToRecent } = userSlice.actions;
+export const { signupUser, loginUser, logoutUser, addToWatchlist, createWatchlist, addMovieToRecent } = userSlice.actions;
 export default userSlice.reducer;

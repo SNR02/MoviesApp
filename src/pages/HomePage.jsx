@@ -26,13 +26,13 @@ const HomePage = () => {
   return (
     <div className="flex">
       {/* Sidebar for watchlists */}
-      <div className="w-1/6 bg-blue-100 p-4 min-h-screen">
+      <div className="w-1/6 bg-slate-100 p-4 min-h-screen">
         <h2 className="text-2xl font-semibold mb-4 text-center text-blue-600">Your Watchlists</h2>
-        <ul className='h-4/5'>
+        <ul className='h-4/5 mt-10 overflow-auto'>
           {user?.watchlists && Object.keys(user.watchlists).map((list) => (
             <li
               key={list}
-              className="cursor-pointer text-blue-600 hover:underline mb-2"
+              className="cursor-pointer text-stone-600 text-lg font-medium my-2 text-center border-2 border-slate-400 rounded-lg"
               onClick={() => navigate(`/watchlist/${list}`)}
             >
               {list}
@@ -40,8 +40,8 @@ const HomePage = () => {
           ))}
         </ul>
         <div className='flex pt-4'>
-          <div className='w-4/5 rounded-sm'>
-            <span className='rounded-full bg-stone-500 px-3.5 py-2 text-white font-semibold text-lg'>{user?.name.at(0)}</span>
+          <div className='w-4/5 rounded-sm flex items-center'>
+            <div className='rounded-full bg-stone-500 h-8 w-8 text-white font-semibold text-xl text-center'>{user?.name.at(0)}</div>
             <span className='ms-2 text-lg'>{user?.name}</span>
           </div>
           <button
