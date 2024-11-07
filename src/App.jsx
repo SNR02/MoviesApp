@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import SignUp from './pages/SignUp';
 import SearchResults from './pages/SearchResultsPage';
 import WatchlistPage from './pages/WatchlistPage';
+import TestSignup2 from './pages/TestSignup2';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path="/watchlist/:listName" element={<WatchlistPage />} />
+        <Route path="/test-signup" element={<TestSignup2 />}/>
         <Route
           path="/"
           element={

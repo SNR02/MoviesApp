@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToWatchlist, createWatchlist } from '../features/userSlice';
+import { addToWatchlist, createWatchlist, removeFromWatchlist } from '../features/userSlice';
 
 const SearchResults = () => {
   const { query } = useParams();
@@ -24,8 +24,11 @@ const SearchResults = () => {
   }, [query]);
 
   const openModal = (movie) => {
-    setSelectedMovie({ ...movie, id: movie.imdbID }); // Set `id` for consistency
-    setSelectedWatchlists([]); // Reset selected watchlists
+    setSelectedMovie(movie); // Save selected movie for watchlist operations
+    const existingWatchlists = user ? Object.keys(user.watchlists).filter((list) =>
+      user.watchlists[list].some((item) => item.imdbID === movie.imdbID)
+    ) : [];
+    setSelectedWatchlists(existingWatchlists);
     setShowModal(true);
   };
 
@@ -36,9 +39,19 @@ const SearchResults = () => {
   };
 
   const addMovieToSelectedWatchlists = () => {
+    if (!selectedMovie) return;
+
     selectedWatchlists.forEach((watchlist) => {
       dispatch(addToWatchlist({ category: watchlist, movie: selectedMovie }));
     });
+
+    const unselectedWatchlists = Object.keys(user.watchlists).filter(
+      (list) => !selectedWatchlists.includes(list)
+    );
+    unselectedWatchlists.forEach((watchlist) => {
+      dispatch(removeFromWatchlist({ category: watchlist, movieId: selectedMovie.imdbID }));
+    });
+
     setShowModal(false);
   };
 
@@ -74,12 +87,13 @@ const SearchResults = () => {
           </div>
         ))}
       </div>
-      
+
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-80 shadow-lg">
             <h3 className="text-lg font-semibold mb-4">Add to Watchlist</h3>
-            
+            <p className="text-sm text-gray-500 mb-2">Unchecking a watchlist will remove the movie from it.</p>
+
             <div className="space-y-2 mb-4">
               {user?.watchlists && Object.keys(user.watchlists).map((list) => (
                 <label key={list} className="flex items-center space-x-2">
@@ -93,7 +107,7 @@ const SearchResults = () => {
                 </label>
               ))}
             </div>
-            
+
             <input
               type="text"
               placeholder="New Watchlist Name"
@@ -101,16 +115,13 @@ const SearchResults = () => {
               onChange={(e) => setNewWatchlistName(e.target.value)}
               className="w-full px-2 py-1 border rounded mb-2"
             />
-            <button
-              onClick={createNewWatchlist}
-              className="text-sm text-blue-500 mb-4"
-            >
+            <button onClick={createNewWatchlist} className="text-sm text-blue-500 mb-4">
               Create and Add
             </button>
 
             <div className="flex justify-end space-x-2">
               <button onClick={addMovieToSelectedWatchlists} className="px-4 py-2 bg-blue-500 text-white rounded">
-                Add
+                Save
               </button>
               <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-gray-300 rounded">
                 Close

@@ -79,6 +79,16 @@ const userSlice = createSlice({
       }
     },
 
+    removeFromWatchlist: (state, action) => {
+      const { category, movieId } = action.payload;
+      const user = state.users.find((user) => user.email === state.currentUser);
+      if (user && user.watchlists[category]) {
+        user.watchlists[category] = user.watchlists[category].filter((item) => item.imdbID !== movieId);
+        saveToLocalStorage('users', state.users);
+      }
+    },
+    
+
     addMovieToRecent: (state, action) => {
       const movie = action.payload;
       const user = state.users.find((user) => user.email === state.currentUser);
@@ -95,5 +105,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { signupUser, loginUser, logoutUser, addToWatchlist, createWatchlist, addMovieToRecent } = userSlice.actions;
+export const { signupUser, loginUser, logoutUser, addToWatchlist, createWatchlist, addMovieToRecent, removeFromWatchlist } = userSlice.actions;
 export default userSlice.reducer;
