@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp';
 import SearchResults from './pages/SearchResultsPage';
 import WatchlistPage from './pages/WatchlistPage';
 import TestSignup2 from './pages/TestSignup2';
+import TestSignUp from './pages/TestSignUp';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path="/watchlist/:listName" element={<WatchlistPage />} />
-        <Route path="/test-signup" element={<TestSignup2 />}/>
+        <Route path="/test-signup" element={<TestSignUp />}/>
         <Route
           path="/"
           element={
