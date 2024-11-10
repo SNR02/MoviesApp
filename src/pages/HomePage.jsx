@@ -72,7 +72,7 @@ const HomePage = () => {
         <button className="text-blue-600 lg:hidden mb-10" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             {isSidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
-          <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold text-center lg:text-left">Welcome to Your Movie Watchlist</h1>
+          <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold text-center">Welcome to Your Movie Watchlist</h1>
           {/* Toggle Sidebar Icon for mobile */}
           
         </header>
